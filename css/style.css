@@ -1,0 +1,256 @@
+:root {
+    --green-900: #0d3b1e;
+    --green-700: #1b5e20;
+    --green-500: #2e7d32;
+    --green-100: #e8f5e9;
+    --accent: #00e676;
+    --gray-900: #121212;
+    --gray-800: #1e1e1e;
+    --gray-100: #f5f5f5;
+    --gray-50: #fafafa;
+    --text: #212121;
+    --text-light: #757575;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.7;
+    background: var(--gray-50);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+}
+
+body.dark {
+    background: var(--gray-900);
+    color: var(--gray-100);
+    --text: #e0e0e0;
+    --text-light: #bdbdbd;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+
+/* Header */
+
+header {
+    background: var(--green-900);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+}
+
+.logo span {
+    color: var(--accent);
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+    transition: 0.2s;
+}
+
+nav a:hover,
+nav a.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+/* Hero */
+
+.hero {
+    background: linear-gradient(135deg, rgba(13, 59, 30, 0.9), rgba(46, 125, 50, 0.8)), url('../assets/hero.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 6rem 0;
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--green-900);
+    padding: 0.9rem 1.8rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 230, 118, 0.4);
+}
+
+
+/* Sections */
+
+section {
+    padding: 5rem 0;
+}
+
+section h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+    transition: 0.3s;
+}
+
+body.dark .card {
+    background: var(--gray-800);
+    border-color: #333;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    color: var(--green-700);
+    margin-bottom: 0.5rem;
+}
+
+body.dark .card h3 {
+    color: var(--accent);
+}
+
+
+/* Forms */
+
+input,
+textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font: inherit;
+}
+
+body.dark input,
+body.dark textarea {
+    background: var(--gray-800);
+    border-color: #444;
+    color: var(--gray-100);
+}
+
+
+/* Footer */
+
+footer {
+    background: var(--green-900);
+    color: #a5d6a7;
+    padding: 3rem 0 1rem;
+    margin-top: 4rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+footer a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+footer .copyright {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+    nav ul {
+        display: none;
+    }
+    /* Add hamburger later if needed */
+    .hero {
+        padding: 4rem 0;
+    }
+    section {
+        padding: 3rem 0;
+    }
+}

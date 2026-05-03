@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Computing Quiz | GreenTech Buea</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .question {
+            display: none;
+        }
+        
+        .question.active {
+            display: block;
+        }
+        
+        .options button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: white;
+            border: 2px solid #ddd;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        body.dark.options button {
+            background: var(--gray-800);
+            border-color: #444;
+        }
+        
+        .options button:hover {
+            border-color: var(--green-500);
+        }
+        
+        .options button.correct {
+            background: #c8e6c9;
+            border-color: #2e7d32;
+        }
+        
+        .options button.wrong {
+            background: #ffcdd2;
+            border-color: #c62828;
+        }
+        
+        #quiz-result {
+            display: none;
+            text-align: center;
+        }
+        
+        .progress {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container nav">
+            <div class="logo">Green<span>Tech</span></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="ewaste.html">E-Waste</a></li>
+                    <li><a href="solutions.html">Solutions</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="quiz.html">Quiz</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" onclick="toggleDarkMode()">🌓</button>
+        </div>
+    </header>
+
+    <section>
+        <div class="container quiz-container">
+            <h2>Test Your Green Tech Knowledge</h2>
+            <p class="section-subtitle">5 questions. See how much you know about e-waste in Cameroon.</p>
+
+            <div class="progress">
+                <div class="progress-bar" id="progress"></div>
+            </div>
+
+            <div id="quiz-box"></div>
+
+            <div id="quiz-result">
+                <h3>Your Score: <span id="score"></span>/5</h3>
+                <p id="result-message"></p>
+                <button class="btn" onclick="restartQuiz()">Try Again</button>
+                <a href="solutions.html" class="btn" style="background:var(--green-700); margin-left:1rem;">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <!-- Same footer as other pages -->
+    </footer>
+    <script src="js/main.js"></script>
+    <script>
+        const quizData = [{
+            q: "What % of global e-waste was properly recycled in 2025?",
+            options: ["5.2%", "17.4%", "45.1%", "62.0%"],
+            answer: 1,
+            explain: "Only 17.4% was documented as formally recycled. The rest is dumped, burned, or hoarded."
+        }, {
+            q: "Which item is NOT considered e-waste?",
+            options: ["Broken laptop", "Dead phone battery", "Plastic water bottle", "Old printer"],
+            answer: 2,
+            explain: "E-waste = electronics with a plug or battery. Water bottles are plastic waste, not e-waste."
+        }, {
+            q: "How much of a laptop's total CO₂ footprint comes from manufacturing it?",
+            options: ["~20%", "~50%", "~80%", "~5%"],
+            answer: 2,
+            explain: "About 80% comes from mining, factories, and shipping. That's why using devices longer matters most."
+        }, {
+            q: "Where can you safely drop off e-waste in Molyko, Buea?",
+            options: ["Any roadside bin", "MTN Service Center", "Burn it behind your house", "Buea Town market"],
+            answer: 1,
+            explain: "MTN and Orange shops in Buea have e-waste collection. Never burn it - releases toxic fumes."
+        }, {
+            q: "Dark mode on OLED phones saves energy because...",
+            options: ["Black pixels use less power", "The phone runs slower", "It blocks internet", "Green color is efficient"],
+            answer: 0,
+            explain: "On OLED screens, black pixels are actually turned off. So dark mode can save 10-30% battery."
+        }];
+
+        let currentQ = 0,
+            score = 0;
+
+        function loadQuiz() {
+            const box = document.getElementById('quiz-box');
+            box.innerHTML = '';
+            quizData.forEach((item, i) => {
+                        const div = document.createElement('div');
+                        div.className = 'question' + (i === 0 ? ' active' : '');
+                        div.innerHTML = `
+                    <h3>Q${i+1}. ${item.q}</h3>
+                    <div class="options">
+                        ${item.options.map((opt, j) =>
+                            `<button onclick="checkAnswer(${i}, ${j}, this)">${opt}</button>`
+                        ).join('')}
+                    </div>
+                    <p class="explain" style="display:none; margin-top:1rem; color:var(--text-light);"></p>
+                `;
+                box.appendChild(div);
+            });
+            updateProgress();
+        }
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            const question = quizData[qIndex];
+            const buttons = btn.parentNode.querySelectorAll('button');
+            const explain = btn.parentNode.nextElementSibling;
+
+            buttons.forEach(b => b.disabled = true);
+
+            if (optIndex === question.answer) {
+                btn.classList.add('correct');
+                score++;
+            } else {
+                btn.classList.add('wrong');
+                buttons[question.answer].classList.add('correct');
+            }
+
+            explain.textContent = question.explain;
+            explain.style.display = 'block';
+
+            setTimeout(() => {
+                if (currentQ < quizData.length - 1) {
+                    document.querySelectorAll('.question')[currentQ].classList.remove('active');
+                    currentQ++;
+                    document.querySelectorAll('.question')[currentQ].classList.add('active');
+                    updateProgress();
+                } else {
+                    showResult();
+                }
+            }, 1500);
+        }
+
+        function updateProgress() {
+            document.getElementById('progress').style.width = `${(currentQ / quizData.length) * 100}%`;
+        }
+
+        function showResult() {
+            document.getElementById('quiz-box').style.display = 'none';
+            document.getElementById('quiz-result').style.display = 'block';
+            document.getElementById('score').textContent = score;
+
+            let msg = '';
+            if (score === 5) msg = "Perfect! You're a Green Tech guru. Share this with friends in Buea.";
+            else if (score >= 3) msg = "Nice! You know your stuff. Check the Solutions page to level up.";
+            else msg = "Good start! Read the About and E-Waste pages, then try again.";
+            document.getElementById('result-message').textContent = msg;
+            document.getElementById('progress').style.width = '100%';
+        }
+
+        function restartQuiz() {
+            currentQ = 0; score = 0;
+            document.getElementById('quiz-result').style.display = 'none';
+            document.getElementById('quiz-box').style.display = 'block';
+            loadQuiz();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadQuiz);
+    </script>
+</body>
+
+</html>
